@@ -1,9 +1,9 @@
- # Foo
+# Foo
 # Bar
 
- obj {      
-    nestobj {  
-  key1: "val"    
-     key2: 2 
-  }  
-    }  
+obj {
+  nestobj {
+    key1: "val"
+    key2: 2
+  }
+}
