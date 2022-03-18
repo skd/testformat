@@ -1,7 +1,7 @@
  # Foo
 # Bar
 
- obj {     
+ obj {      
     nestobj {  
   key1: "val"    
      key2: 2 
