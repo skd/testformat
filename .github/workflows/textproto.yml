@@ -24,7 +24,7 @@ jobs:
     - name: Format textprotos
       id: textproto-format
       run: |
-        TEXTPROTOS=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.ref }} ${{ github.sha }} | grep .textproto$ | xargs)
+        TEXTPROTOS=$(git diff --name-only --diff-filter=ACMRT --no-commit-id -r ${{ github.sha }} | grep .textproto$ | xargs)
         echo "TEXTPROTOS=$TEXTPROTOS"
         txtpbfmt $TEXTPROTOS
     - name: Check for modified files
