@@ -24,14 +24,14 @@ jobs:
         TEXTPROTOS=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .textproto$ | xargs)
         ${GOPATH}/bin/txtpbfmt $TEXTPROTOS
     - name: Check for modified files
-        id: git-check
-        run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+      id: git-check
+      run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
     - name: Push changes
-        if: steps.git-check.outputs.modified == 'true'
-        run: |
-          git config --global user.name 'Alexander Pavlov'
-          git config --global user.email '2185498+crdev@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git commit -am "Automated txtpbfmt fixes"
-          git push
+      if: steps.git-check.outputs.modified == 'true'
+      run: |
+        git config --global user.name 'Alexander Pavlov'
+        git config --global user.email '2185498+crdev@users.noreply.github.com'
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git commit -am "Automated txtpbfmt fixes"
+        git push
 
