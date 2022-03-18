@@ -20,7 +20,7 @@ jobs:
       id: textproto-format
       run: |
         go version
-        go install github.com/protocolbuffers/txtpbfmt/cmd/txtpbfmt
+        go install github.com/protocolbuffers/txtpbfmt/cmd/txtpbfmt@latest
         TEXTPROTOS=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .textproto$ | xargs)
         txtpbfmt $TEXTPROTOS
     - name: Check for modified files
