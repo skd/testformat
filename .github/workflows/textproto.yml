@@ -1,0 +1,37 @@
+name: Format textproto files
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.textproto'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.8'
+    - name: Format textprotos
+      id: textproto-format
+      run: |
+        go version
+        go get -u github.com/protocolbuffers/txtpbfmt/cmd/txtpbfmt
+        TEXTPROTOS=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .textproto$ | xargs)
+        ${GOPATH}/bin/txtpbfmt $TEXTPROTOS
+    - name: Check for modified files
+        id: git-check
+        run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+    - name: Push changes
+        if: steps.git-check.outputs.modified == 'true'
+        run: |
+          git config --global user.name 'Alexander Pavlov'
+          git config --global user.email '2185498+crdev@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Automated txtpbfmt fixes"
+          git push
+
